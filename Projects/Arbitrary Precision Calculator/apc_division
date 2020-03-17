@@ -1,0 +1,76 @@
+#include"apc.h"
+//extern int minus_flag; //Making use of minus_flag from sub.c to indicate when difference is negative
+
+extern unsigned int op1_length;
+extern unsigned int op2_length;
+
+Slist *apc_division(Slist *op1_head, Slist *op2_head)
+{
+   // printf("%d", op1_length);
+    Slist *trav1 = op1_head, *trav2 = op2_head;
+
+    //Variable to store quotient
+    Slist *quo = NULL;
+
+    //Checking if counts are equal
+    if(op1_length == op2_length)
+    {
+	while(trav1 && trav2)
+	{
+	    if(trav1->data == trav2->data) //If node data equal, proceed to next node
+	    {
+		trav1 = trav1->link;
+		trav2 = trav2->link;
+	    }
+	    else if(trav1->data < trav2->data) //If 1st operand less than 2nd operand, quotient is 0
+	    {
+		//insert_at_first(&quo, 0);	
+		//return quo;
+		return 0;
+	    }
+	    else
+		break;
+	}
+    }
+    else //If counts do not match
+    {
+	if(op1_length < op2_length) //If operand 1 is smaller than operand 2, quotient is 0
+	{
+	    //insert_at_first(&quo, 0);	
+	    //return quo;
+	    return 0;
+	}
+    }
+
+    //Division is repeated subtraction until result is 0
+
+    unsigned long long int count = 0; //Count is the quotient
+
+    quo = op1_head; //Assigning operand 1 to quo for repeated subtraction below
+
+    while(1) //While the difference is 0 or positive, iterate
+    {
+	//if(minus_flag == 1) //Once the difference becomes negative, break loop
+	  //  break;
+
+	count++;
+	quo = apc_subtraction(quo, op2_head);
+	/*for(long int i = 0; i < 9999999; i++);
+	printlist(quo);
+	puts("");*/
+	reverse_list(&quo); //Reversing for subtraction because after sub() data is inserted at first and we must reverse quo to subtract op2_head from it
+    }
+    //printf("Quotient = %ld\n", count - 1);
+
+#if 0
+    puts("\nBefore subtraction");
+    puts("Temp1");
+    printlist(op1_head);
+    puts("\nTemp2");
+    printlist(op2_head);
+    puts("");
+#endif
+
+    //return count - 1;
+    return quo;
+}
